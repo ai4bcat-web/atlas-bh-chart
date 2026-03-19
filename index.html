@@ -3,30 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Domain Map</title>
+  <title>Operational Intelligence Domain Map</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f5f6fa;
-      --surface: #ffffff;
-      --border: #e4e7ef;
-      --border-hover: #c7cde0;
-      --text-primary: #1a1d2e;
-      --text-secondary: #5a6278;
-      --text-muted: #9399ae;
-      --accent: #4f46e5;
-      --accent-light: #eef2ff;
-      --accent-mid: #c7d2fe;
-      --tag-bg: #f0f4ff;
-      --tag-border: #d0daff;
-      --role-bg: #fafafa;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-      --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
-      --radius: 14px;
+      --bg:              #f4f5f9;
+      --surface:         #ffffff;
+      --surface-raised:  #fafbfd;
+      --border:          #e3e7f0;
+      --border-hover:    #bcc5dc;
+      --text-primary:    #111827;
+      --text-secondary:  #4b5568;
+      --text-muted:      #9ca3af;
+
+      --accent:          #4f46e5;
+      --accent-light:    #eef2ff;
+      --accent-mid:      #c7d2fe;
+
+      /* status tag palette */
+      --tag-agent-bg:    #dcfce7;
+      --tag-agent-border:#bbf7d0;
+      --tag-agent-text:  #15803d;
+
+      --tag-ai-bg:       #ede9fe;
+      --tag-ai-border:   #ddd6fe;
+      --tag-ai-text:     #6d28d9;
+
+      --tag-road-bg:     #fef9c3;
+      --tag-road-border: #fde68a;
+      --tag-road-text:   #92400e;
+
+      --tag-sup-bg:      #f1f5f9;
+      --tag-sup-border:  #cbd5e1;
+      --tag-sup-text:    #475569;
+
+      --shadow-xs: 0 1px 2px rgba(0,0,0,.05);
+      --shadow-sm: 0 1px 4px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,.10), 0 3px 8px rgba(0,0,0,.05);
+
+      --radius:    14px;
       --radius-sm: 8px;
       --radius-xs: 5px;
-      --transition: 0.18s ease;
+      --t: 0.18s ease;
     }
 
     body {
@@ -34,66 +54,314 @@
       background: var(--bg);
       color: var(--text-primary);
       min-height: 100vh;
-      padding: 48px 24px 80px;
+      padding: 0 0 80px;
     }
 
-    /* ── Header ── */
-    .page-header {
-      max-width: 1100px;
-      margin: 0 auto 48px;
+    /* ═══════════════════════════════════════
+       PAGE HEADER BANNER
+    ═══════════════════════════════════════ */
+    .page-banner {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 40px 40px 0;
     }
-    .page-header h1 {
-      font-size: 2rem;
-      font-weight: 700;
+    .page-banner-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .page-banner-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding-bottom: 32px;
+    }
+    .page-banner h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
       letter-spacing: -0.5px;
       color: var(--text-primary);
+      line-height: 1.2;
     }
-    .page-header p {
-      margin-top: 8px;
-      font-size: 1rem;
+    .page-banner h1 span {
+      color: var(--accent);
+    }
+    .page-banner .subtitle {
+      margin-top: 6px;
+      font-size: 0.9rem;
       color: var(--text-secondary);
       line-height: 1.55;
+      max-width: 520px;
     }
-    .page-header .divider {
-      margin-top: 28px;
-      height: 1px;
-      background: var(--border);
+    .system-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent-mid);
+      color: var(--accent);
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+    }
+    .system-pill::before {
+      content: "";
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.4; }
     }
 
-    /* ── Section Label ── */
+    /* ── Stat cards row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--border);
+    }
+    .stat-card {
+      padding: 20px 24px;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    .stat-card:last-child { border-right: none; }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .stat-label {
+      margin-top: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .stat-card--accent .stat-number { color: var(--accent); }
+    .stat-card--green  .stat-number { color: #16a34a; }
+
+    /* ═══════════════════════════════════════
+       MAIN CONTENT WRAPPER
+    ═══════════════════════════════════════ */
+    .page-body {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 40px 40px 0;
+    }
+
+    /* ═══════════════════════════════════════
+       PEOPLE / OWNERSHIP LAYER
+    ═══════════════════════════════════════ */
+    .people-section {
+      margin-bottom: 36px;
+    }
     .section-label {
-      max-width: 1100px;
-      margin: 0 auto 20px;
-      font-size: 0.7rem;
+      font-size: 0.67rem;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
+      margin-bottom: 14px;
     }
+    .people-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .person-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px 6px 6px;
+      box-shadow: var(--shadow-xs);
+      transition: box-shadow var(--t), border-color var(--t);
+    }
+    .person-pill:hover {
+      box-shadow: var(--shadow-sm);
+      border-color: var(--border-hover);
+    }
+    .person-avatar {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem; font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .person-info { display: flex; flex-direction: column; line-height: 1; }
+    .person-name { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); }
+    .person-role { font-size: 0.68rem; color: var(--text-muted); margin-top: 1px; }
 
-    /* ── Grid ── */
-    .grid {
-      max-width: 1100px;
-      margin: 0 auto 48px;
+    /* avatar colors */
+    .av-indigo { background: #4f46e5; }
+    .av-green  { background: #16a34a; }
+    .av-orange { background: #ea580c; }
+    .av-teal   { background: #0d9488; }
+    .av-violet { background: #7c3aed; }
+    .av-rose   { background: #e11d48; }
+    .av-sky    { background: #0284c7; }
+
+    /* ═══════════════════════════════════════
+       ATLAS — OVERARCHING DOMAIN
+    ═══════════════════════════════════════ */
+    .atlas-wrap {
+      margin-bottom: 40px;
+    }
+    .atlas-card {
+      background: #ffffff;
+      border: 2px solid var(--accent);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: box-shadow var(--t), transform var(--t);
+    }
+    .atlas-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .atlas-top-bar {
+      background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+      padding: 10px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .atlas-top-bar-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+    }
+    .atlas-top-bar-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .atlas-body {
+      padding: 28px 28px 24px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-      gap: 20px;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      align-items: start;
+    }
+    .atlas-left h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: var(--accent);
+    }
+    .atlas-left p {
+      margin-top: 8px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 480px;
+    }
+    .atlas-capabilities {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .atlas-cap-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .atlas-cap-item::before {
+      content: "";
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .atlas-roles {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      min-width: 230px;
+    }
+    .atlas-role-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .atlas-role-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .atlas-role-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 3px 10px 3px 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      width: fit-content;
+    }
+    .chip-av {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.58rem; font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .atlas-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 10px 0;
     }
 
-    /* ── Card ── */
+    /* ═══════════════════════════════════════
+       DOMAIN GRID
+    ═══════════════════════════════════════ */
+    .domains-section { margin-bottom: 40px; }
+    .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    /* ── Domain Card ── */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 26px 24px 22px;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      transition:
-        box-shadow var(--transition),
-        border-color var(--transition),
-        transform var(--transition);
+      overflow: hidden;
+      transition: box-shadow var(--t), border-color var(--t), transform var(--t);
     }
     .card:hover {
       box-shadow: var(--shadow-md);
@@ -101,447 +369,683 @@
       transform: translateY(-2px);
     }
 
-    /* ── Card header ── */
+    .card-top {
+      padding: 20px 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
     .card-header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
     }
     .card-title {
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 700;
       color: var(--text-primary);
       line-height: 1.3;
     }
-    .card--accent .card-title {
+    .card-type-badge {
+      flex-shrink: 0;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 100px;
+      background: var(--accent-light);
+      border: 1px solid var(--accent-mid);
       color: var(--accent);
     }
-    .card-badge {
-      flex-shrink: 0;
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .card-owner-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.75rem;
+    }
+    .owner-label {
       font-size: 0.65rem;
       font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 100px;
-      background: var(--tag-bg);
-      border: 1px solid var(--tag-border);
-      color: var(--accent);
-    }
-
-    /* ── Description ── */
-    .card-desc {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    /* ── Owner row ── */
-    .card-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding-top: 4px;
-    }
-    .meta-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
-    }
-    .meta-label {
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      min-width: 90px;
-      flex-shrink: 0;
-    }
-    .meta-value {
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-    .meta-value--empty {
-      color: var(--text-muted);
-      font-style: italic;
-      font-weight: 400;
-    }
-
-    /* avatar chip */
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--tag-bg);
-      border: 1px solid var(--tag-border);
-      border-radius: 100px;
-      padding: 2px 10px 2px 4px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-    .chip-avatar {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.6rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .chip-avatar--green  { background: #16a34a; }
-    .chip-avatar--indigo { background: #4f46e5; }
-    .chip-avatar--orange { background: #ea580c; }
-    .chip-avatar--teal   { background: #0d9488; }
-    .chip-avatar--violet { background: #7c3aed; }
-
-    /* ── Role list (Atlas card) ── */
-    .role-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: var(--role-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 14px 16px;
-    }
-    .role-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .role-label {
-      font-size: 0.73rem;
-      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.07em;
       color: var(--text-muted);
-      min-width: 155px;
-      flex-shrink: 0;
     }
-
-    /* ── Atlas hero (overarching domain) ── */
-    .atlas-section {
-      max-width: 1100px;
-      margin: 0 auto 48px;
+    .owner-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 2px 8px 2px 3px;
+      font-size: 0.74rem;
+      font-weight: 500;
     }
-    .atlas-section .section-label {
-      max-width: none;
-      margin: 0 0 16px;
-    }
-    .card--hero {
-      border: 2px solid var(--accent);
-      background: linear-gradient(135deg, #f8f8ff 0%, #eef2ff 50%, #f5f0ff 100%);
-      padding: 32px 36px 28px;
-      gap: 18px;
-      position: relative;
-      overflow: hidden;
-    }
-    .card--hero::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 5px;
-      height: 100%;
-      background: var(--accent);
-      border-radius: var(--radius) 0 0 var(--radius);
-    }
-    .card--hero:hover {
-      border-color: #3730a3;
-      box-shadow: 0 8px 28px rgba(79,70,229,.15), 0 3px 8px rgba(79,70,229,.08);
-      transform: translateY(-2px);
-    }
-    .card--hero .card-title {
-      font-size: 1.45rem;
-      letter-spacing: -0.3px;
-      color: var(--accent);
-    }
-    .card--hero .card-badge {
-      background: var(--accent);
+    .owner-av {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.5rem; font-weight: 800;
       color: #fff;
-      border-color: var(--accent);
-      font-size: 0.62rem;
     }
-    .card--hero .card-desc {
-      font-size: 0.92rem;
-      max-width: 680px;
-    }
-    .card--hero .role-list {
-      background: rgba(255,255,255,0.7);
-      border-color: var(--accent-mid);
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 12px;
-      padding: 16px 20px;
-    }
-    .card--hero .role-item {
-      flex: 1 1 180px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-    }
-    .card--hero .role-label {
-      min-width: 0;
-    }
-    .card--hero .chip {
-      background: rgba(255,255,255,0.9);
+    .unassigned {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-style: italic;
     }
 
-    /* ── Separator ── */
+    /* ── Function list ── */
     .card-sep {
       height: 1px;
       background: var(--border);
-      margin: 0 -4px;
+      margin: 0 20px;
+    }
+    .function-list {
+      padding: 12px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .fn-list-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .fn-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: var(--radius-xs);
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      transition: background var(--t), border-color var(--t);
+    }
+    .fn-item:hover {
+      background: #f8f9ff;
+      border-color: var(--border-hover);
+    }
+    .fn-name {
+      font-size: 0.78rem;
+      color: var(--text-primary);
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    .fn-tag {
+      flex-shrink: 0;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .fn-tag--agent {
+      background: var(--tag-agent-bg);
+      border: 1px solid var(--tag-agent-border);
+      color: var(--tag-agent-text);
+    }
+    .fn-tag--ai {
+      background: var(--tag-ai-bg);
+      border: 1px solid var(--tag-ai-border);
+      color: var(--tag-ai-text);
+    }
+    .fn-tag--road {
+      background: var(--tag-road-bg);
+      border: 1px solid var(--tag-road-border);
+      color: var(--tag-road-text);
+    }
+    .fn-tag--sup {
+      background: var(--tag-sup-bg);
+      border: 1px solid var(--tag-sup-border);
+      color: var(--tag-sup-text);
     }
 
-    /* ── Responsive ── */
-    @media (max-width: 680px) {
-      body { padding: 32px 16px 60px; }
-      .page-header h1 { font-size: 1.5rem; }
-      .grid { grid-template-columns: 1fr; gap: 16px; }
-      .meta-label { min-width: 75px; }
-      .role-label { min-width: 130px; }
+    /* ═══════════════════════════════════════
+       LEGEND
+    ═══════════════════════════════════════ */
+    .legend-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .legend-title {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-dot--agent { background: #16a34a; }
+    .legend-dot--ai    { background: #7c3aed; }
+    .legend-dot--road  { background: #d97706; }
+    .legend-dot--sup   { background: #64748b; }
+    .legend-item strong { font-weight: 700; color: var(--text-primary); }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════ */
+    @media (max-width: 960px) {
+      .domain-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-row   { grid-template-columns: repeat(2, 1fr); }
+      .stats-row .stat-card:nth-child(2) { border-right: none; }
+      .stats-row .stat-card:nth-child(3) { border-top: 1px solid var(--border); }
+      .stats-row .stat-card:nth-child(4) { border-top: 1px solid var(--border); }
+    }
+    @media (max-width: 720px) {
+      .page-banner { padding: 28px 20px 0; }
+      .page-body   { padding: 28px 20px 0; }
+      .page-banner h1 { font-size: 1.35rem; }
+      .domain-grid { grid-template-columns: 1fr; }
+      .stats-row   { grid-template-columns: repeat(2, 1fr); }
+      .atlas-body  { grid-template-columns: 1fr; }
+      .atlas-roles { min-width: 0; }
+      .legend-section { gap: 16px; }
+    }
+    @media (max-width: 480px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── Page Header ── -->
-  <header class="page-header">
-    <h1>Domain Map</h1>
-    <p>A living reference of organizational domains, ownership, and responsibilities.</p>
-    <div class="divider"></div>
-  </header>
-
-  <!-- ══════════════════════════════════════════
-       ATLAS — OVERARCHING DOMAIN
-  ══════════════════════════════════════════ -->
-  <div class="atlas-section">
-    <div class="section-label">Core / Operating System</div>
-    <div class="card card--hero">
-      <div class="card-header">
-        <span class="card-title">Atlas</span>
-        <span class="card-badge">Overarching Domain</span>
+<!-- ═══════════════════════════════════════════
+     PAGE HEADER BANNER
+═══════════════════════════════════════════ -->
+<div class="page-banner">
+  <div class="page-banner-inner">
+    <div class="page-banner-top">
+      <div>
+        <div class="system-pill">Operational Intelligence System</div>
+        <h1>Operational Intelligence<br><span>Domain Map</span></h1>
+        <p class="subtitle">Each domain represents a system with AI-assisted and autonomous capabilities. Functions are tagged by operational mode.</p>
       </div>
-      <p class="card-desc">
-        Central operating system for the business. Responsible for vision,
-        execution alignment, and technical architecture across all domains.
-      </p>
-      <div class="card-sep"></div>
-      <div class="role-list">
-        <div class="role-item">
-          <span class="role-label">Visionary</span>
-          <div class="chip">
-            <div class="chip-avatar chip-avatar--indigo">C</div>
-            Chris
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stats-row">
+      <div class="stat-card stat-card--accent">
+        <div class="stat-number">8</div>
+        <div class="stat-label">Domains</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">28</div>
+        <div class="stat-label">Functions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">4</div>
+        <div class="stat-label">Active Owners</div>
+      </div>
+      <div class="stat-card stat-card--green">
+        <div class="stat-number">8</div>
+        <div class="stat-label">Agent Functions</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     MAIN BODY
+═══════════════════════════════════════════ -->
+<div class="page-body">
+
+  <!-- People / Ownership Layer -->
+  <div class="people-section" style="margin-top: 36px;">
+    <div class="section-label">Ownership &amp; Leadership</div>
+    <div class="people-row">
+      <div class="person-pill">
+        <div class="person-avatar av-indigo">C</div>
+        <div class="person-info">
+          <span class="person-name">Chris</span>
+          <span class="person-role">Visionary &amp; Strategy</span>
+        </div>
+      </div>
+      <div class="person-pill">
+        <div class="person-avatar av-green">R</div>
+        <div class="person-info">
+          <span class="person-name">Ryne</span>
+          <span class="person-role">Implementation</span>
+        </div>
+      </div>
+      <div class="person-pill">
+        <div class="person-avatar av-orange">J</div>
+        <div class="person-info">
+          <span class="person-name">Josh</span>
+          <span class="person-role">Engineering Architecture</span>
+        </div>
+      </div>
+      <div class="person-pill">
+        <div class="person-avatar av-teal">AL</div>
+        <div class="person-info">
+          <span class="person-name">Alex L.</span>
+          <span class="person-role">Product</span>
+        </div>
+      </div>
+      <div class="person-pill">
+        <div class="person-avatar av-orange">JH</div>
+        <div class="person-info">
+          <span class="person-name">Josh H.</span>
+          <span class="person-role">Infrastructure</span>
+        </div>
+      </div>
+      <div class="person-pill">
+        <div class="person-avatar av-violet">MK</div>
+        <div class="person-info">
+          <span class="person-name">Maya K.</span>
+          <span class="person-role">Data</span>
+        </div>
+      </div>
+      <div class="person-pill">
+        <div class="person-avatar av-rose">TR</div>
+        <div class="person-info">
+          <span class="person-name">Taylor R.</span>
+          <span class="person-role">Security</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       ATLAS — OVERARCHING DOMAIN
+  ═══════════════════════════════════════ -->
+  <div class="atlas-wrap">
+    <div class="section-label">Core / Operating System</div>
+    <div class="atlas-card">
+      <div class="atlas-top-bar">
+        <span class="atlas-top-bar-label">Overarching Domain</span>
+        <span class="atlas-top-bar-title">Atlas Operating Layer</span>
+      </div>
+      <div class="atlas-body">
+        <div class="atlas-left">
+          <h2>Atlas</h2>
+          <p>Central operating system for the business. Responsible for vision, execution alignment, and technical architecture across all domains.</p>
+          <div class="atlas-capabilities">
+            <div class="atlas-cap-item">System alignment across all business domains</div>
+            <div class="atlas-cap-item">Cross-domain coordination and execution oversight</div>
+            <div class="atlas-cap-item">Technical architecture governance and standards</div>
+            <div class="atlas-cap-item">Strategic vision and operational intelligence</div>
           </div>
         </div>
-        <div class="role-item">
-          <span class="role-label">Implementation</span>
-          <div class="chip">
-            <div class="chip-avatar chip-avatar--green">R</div>
-            Ryne
+        <div class="atlas-roles">
+          <div class="atlas-role-item">
+            <div class="atlas-role-label">Visionary</div>
+            <div class="atlas-role-chip">
+              <div class="chip-av av-indigo">C</div>
+              Chris
+            </div>
           </div>
-        </div>
-        <div class="role-item">
-          <span class="role-label">Eng. Architecture</span>
-          <div class="chip">
-            <div class="chip-avatar chip-avatar--orange">J</div>
-            Josh
+          <div class="atlas-sep"></div>
+          <div class="atlas-role-item">
+            <div class="atlas-role-label">Implementation</div>
+            <div class="atlas-role-chip">
+              <div class="chip-av av-green">R</div>
+              Ryne
+            </div>
+          </div>
+          <div class="atlas-sep"></div>
+          <div class="atlas-role-item">
+            <div class="atlas-role-label">Eng. Architecture</div>
+            <div class="atlas-role-chip">
+              <div class="chip-av av-orange">J</div>
+              Josh
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════
-       EXISTING DOMAINS
-  ══════════════════════════════════════════ -->
-  <div class="section-label">Existing Domains</div>
-  <div class="grid">
 
-    <!-- Financial -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Financial</span>
-        <span class="card-badge">Domain</span>
-      </div>
-      <p class="card-desc">
-        Manages financial systems, reporting pipelines, billing integrations,
-        and accounting data flows across the organization.
-      </p>
-      <div class="card-sep"></div>
-      <div class="card-meta">
-        <div class="meta-row">
-          <span class="meta-label">Owner</span>
-          <span class="meta-value--empty">Unassigned</span>
+  <!-- ═══════════════════════════════════════
+       DOMAIN GRID
+  ═══════════════════════════════════════ -->
+  <div class="domains-section">
+    <div class="section-label">Operational Domains</div>
+    <div class="domain-grid">
+
+      <!-- ── Financial ── -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-header">
+            <span class="card-title">Financial</span>
+            <span class="card-type-badge">Domain</span>
+          </div>
+          <p class="card-desc">Manages financial systems, reporting pipelines, billing integrations, and accounting data flows.</p>
+          <div class="card-owner-row">
+            <span class="owner-label">Owner</span>
+            <span class="unassigned">Unassigned</span>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Dev & Integration Support -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Dev &amp; Integration Support</span>
-        <span class="card-badge">Domain</span>
-      </div>
-      <p class="card-desc">
-        Provides tooling, platform support, and integration services that
-        enable engineering teams to build and ship reliably.
-      </p>
-      <div class="card-sep"></div>
-      <div class="card-meta">
-        <div class="meta-row">
-          <span class="meta-label">Owner</span>
-          <span class="meta-value--empty">Unassigned</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Product</span>
-        <span class="card-badge">Domain</span>
-      </div>
-      <p class="card-desc">
-        Owns the product roadmap, discovery process, and cross-functional
-        alignment between design, engineering, and stakeholders.
-      </p>
-      <div class="card-sep"></div>
-      <div class="card-meta">
-        <div class="meta-row">
-          <span class="meta-label">Owner</span>
-          <div class="chip">
-            <div class="chip-avatar chip-avatar--teal">AL</div>
-            Alex L.
+        <div class="card-sep"></div>
+        <div class="function-list">
+          <div class="fn-list-label">Functions</div>
+          <div class="fn-item">
+            <span class="fn-name">Forecasting &amp; Strategy</span>
+            <span class="fn-tag fn-tag--agent">Agent</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Bookkeeping</span>
+            <span class="fn-tag fn-tag--ai">AI-Assisted</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Billing &amp; Invoicing</span>
+            <span class="fn-tag fn-tag--ai">AI-Assisted</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Revenue Analytics</span>
+            <span class="fn-tag fn-tag--agent">Agent</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Infrastructure -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Infrastructure</span>
-        <span class="card-badge">Domain</span>
-      </div>
-      <p class="card-desc">
-        Responsible for cloud infrastructure, deployment pipelines,
-        monitoring, and platform reliability across all environments.
-      </p>
-      <div class="card-sep"></div>
-      <div class="card-meta">
-        <div class="meta-row">
-          <span class="meta-label">Owner</span>
-          <div class="chip">
-            <div class="chip-avatar chip-avatar--orange">JH</div>
-            Josh H.
+      <!-- ── Dev & Integration Support ── -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-header">
+            <span class="card-title">Dev &amp; Integration Support</span>
+            <span class="card-type-badge">Domain</span>
+          </div>
+          <p class="card-desc">Provides tooling, platform support, and integration services that enable engineering teams to build and ship reliably.</p>
+          <div class="card-owner-row">
+            <span class="owner-label">Owner</span>
+            <span class="unassigned">Unassigned</span>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <div class="function-list">
+          <div class="fn-list-label">Functions</div>
+          <div class="fn-item">
+            <span class="fn-name">API Integrations</span>
+            <span class="fn-tag fn-tag--agent">Agent</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Platform Monitoring</span>
+            <span class="fn-tag fn-tag--ai">AI-Assisted</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Deployment Pipelines</span>
+            <span class="fn-tag fn-tag--sup">Support</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Internal Tooling</span>
+            <span class="fn-tag fn-tag--road">Roadmap</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Data -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Data</span>
-        <span class="card-badge">Domain</span>
-      </div>
-      <p class="card-desc">
-        Governs data architecture, pipelines, warehousing, and analytics
-        tooling that power internal and customer-facing insights.
-      </p>
-      <div class="card-sep"></div>
-      <div class="card-meta">
-        <div class="meta-row">
-          <span class="meta-label">Owner</span>
-          <div class="chip">
-            <div class="chip-avatar chip-avatar--violet">MK</div>
-            Maya K.
+      <!-- ── Product ── -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-header">
+            <span class="card-title">Product</span>
+            <span class="card-type-badge">Domain</span>
+          </div>
+          <p class="card-desc">Owns the product roadmap, discovery process, and cross-functional alignment between design, engineering, and stakeholders.</p>
+          <div class="card-owner-row">
+            <span class="owner-label">Owner</span>
+            <div class="owner-chip">
+              <div class="owner-av av-teal">AL</div>
+              Alex L.
+            </div>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <div class="function-list">
+          <div class="fn-list-label">Functions</div>
+          <div class="fn-item">
+            <span class="fn-name">Roadmap Planning</span>
+            <span class="fn-tag fn-tag--agent">Agent</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">User Research</span>
+            <span class="fn-tag fn-tag--ai">AI-Assisted</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Feature Prioritization</span>
+            <span class="fn-tag fn-tag--agent">Agent</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Stakeholder Reporting</span>
+            <span class="fn-tag fn-tag--ai">AI-Assisted</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Security -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Security</span>
-        <span class="card-badge">Domain</span>
-      </div>
-      <p class="card-desc">
-        Oversees application security, access controls, compliance posture,
-        and incident response across the organization.
-      </p>
-      <div class="card-sep"></div>
-      <div class="card-meta">
-        <div class="meta-row">
-          <span class="meta-label">Owner</span>
-          <div class="chip">
-            <div class="chip-avatar chip-avatar--green">TR</div>
-            Taylor R.
+      <!-- ── Infrastructure ── -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-header">
+            <span class="card-title">Infrastructure</span>
+            <span class="card-type-badge">Domain</span>
+          </div>
+          <p class="card-desc">Responsible for cloud infrastructure, deployment pipelines, monitoring, and platform reliability across all environments.</p>
+          <div class="card-owner-row">
+            <span class="owner-label">Owner</span>
+            <div class="owner-chip">
+              <div class="owner-av av-orange">JH</div>
+              Josh H.
+            </div>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <div class="function-list">
+          <div class="fn-list-label">Functions</div>
+          <div class="fn-item">
+            <span class="fn-name">Cloud Provisioning</span>
+            <span class="fn-tag fn-tag--agent">Agent</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Uptime Monitoring</span>
+            <span class="fn-tag fn-tag--ai">AI-Assisted</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">CI/CD Pipelines</span>
+            <span class="fn-tag fn-tag--sup">Support</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Disaster Recovery</span>
+            <span class="fn-tag fn-tag--road">Roadmap</span>
           </div>
         </div>
       </div>
-    </div>
 
-  </div><!-- /existing grid -->
-
-
-  <!-- ══════════════════════════════════════════
-       NEW DOMAINS
-  ══════════════════════════════════════════ -->
-  <div class="section-label">New Domains</div>
-  <div class="grid">
-
-    <!-- New Domain 1 -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">New Domain 1</span>
-        <span class="card-badge">Domain</span>
-      </div>
-      <p class="card-desc">
-        Placeholder description for New Domain 1. Update this with the
-        domain's purpose, scope, and key responsibilities.
-      </p>
-      <div class="card-sep"></div>
-      <div class="card-meta">
-        <div class="meta-row">
-          <span class="meta-label">Owner</span>
-          <span class="meta-value--empty">Unassigned</span>
+      <!-- ── Data ── -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-header">
+            <span class="card-title">Data</span>
+            <span class="card-type-badge">Domain</span>
+          </div>
+          <p class="card-desc">Governs data architecture, pipelines, warehousing, and analytics tooling that power internal and customer-facing insights.</p>
+          <div class="card-owner-row">
+            <span class="owner-label">Owner</span>
+            <div class="owner-chip">
+              <div class="owner-av av-violet">MK</div>
+              Maya K.
+            </div>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <div class="function-list">
+          <div class="fn-list-label">Functions</div>
+          <div class="fn-item">
+            <span class="fn-name">Data Pipeline Management</span>
+            <span class="fn-tag fn-tag--agent">Agent</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Analytics &amp; Reporting</span>
+            <span class="fn-tag fn-tag--ai">AI-Assisted</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Data Warehousing</span>
+            <span class="fn-tag fn-tag--sup">Support</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">ML Model Management</span>
+            <span class="fn-tag fn-tag--road">Roadmap</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- New Domain 2 -->
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">New Domain 2</span>
-        <span class="card-badge">Domain</span>
-      </div>
-      <p class="card-desc">
-        Placeholder description for New Domain 2. Update this with the
-        domain's purpose, scope, and key responsibilities.
-      </p>
-      <div class="card-sep"></div>
-      <div class="card-meta">
-        <div class="meta-row">
-          <span class="meta-label">Owner</span>
-          <span class="meta-value--empty">Unassigned</span>
+      <!-- ── Security ── -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-header">
+            <span class="card-title">Security</span>
+            <span class="card-type-badge">Domain</span>
+          </div>
+          <p class="card-desc">Oversees application security, access controls, compliance posture, and incident response across the organization.</p>
+          <div class="card-owner-row">
+            <span class="owner-label">Owner</span>
+            <div class="owner-chip">
+              <div class="owner-av av-rose">TR</div>
+              Taylor R.
+            </div>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <div class="function-list">
+          <div class="fn-list-label">Functions</div>
+          <div class="fn-item">
+            <span class="fn-name">Threat Detection</span>
+            <span class="fn-tag fn-tag--agent">Agent</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Access Control</span>
+            <span class="fn-tag fn-tag--ai">AI-Assisted</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Compliance Monitoring</span>
+            <span class="fn-tag fn-tag--ai">AI-Assisted</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Incident Response</span>
+            <span class="fn-tag fn-tag--sup">Support</span>
+          </div>
         </div>
       </div>
+
+      <!-- ── New Domain 1 ── -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-header">
+            <span class="card-title">New Domain 1</span>
+            <span class="card-type-badge">Domain</span>
+          </div>
+          <p class="card-desc">Placeholder — update with this domain's purpose, scope, and key responsibilities.</p>
+          <div class="card-owner-row">
+            <span class="owner-label">Owner</span>
+            <span class="unassigned">Unassigned</span>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <div class="function-list">
+          <div class="fn-list-label">Functions</div>
+          <div class="fn-item">
+            <span class="fn-name">Placeholder Function A</span>
+            <span class="fn-tag fn-tag--road">Roadmap</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Placeholder Function B</span>
+            <span class="fn-tag fn-tag--road">Roadmap</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── New Domain 2 ── -->
+      <div class="card">
+        <div class="card-top">
+          <div class="card-header">
+            <span class="card-title">New Domain 2</span>
+            <span class="card-type-badge">Domain</span>
+          </div>
+          <p class="card-desc">Placeholder — update with this domain's purpose, scope, and key responsibilities.</p>
+          <div class="card-owner-row">
+            <span class="owner-label">Owner</span>
+            <span class="unassigned">Unassigned</span>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <div class="function-list">
+          <div class="fn-list-label">Functions</div>
+          <div class="fn-item">
+            <span class="fn-name">Placeholder Function A</span>
+            <span class="fn-tag fn-tag--road">Roadmap</span>
+          </div>
+          <div class="fn-item">
+            <span class="fn-name">Placeholder Function B</span>
+            <span class="fn-tag fn-tag--road">Roadmap</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /domain-grid -->
+  </div><!-- /domains-section -->
+
+
+  <!-- ═══════════════════════════════════════
+       LEGEND
+  ═══════════════════════════════════════ -->
+  <div class="legend-section">
+    <span class="legend-title">Legend</span>
+    <div class="legend-items">
+      <div class="legend-item">
+        <div class="legend-dot legend-dot--agent"></div>
+        <div><strong>Agent</strong> — Autonomous system, minimal human input</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot legend-dot--ai"></div>
+        <div><strong>AI-Assisted</strong> — Human + AI collaboration</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot legend-dot--road"></div>
+        <div><strong>Roadmap</strong> — Planned capability, not yet active</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot legend-dot--sup"></div>
+        <div><strong>Support</strong> — Infrastructure / operational backbone</div>
+      </div>
     </div>
+  </div>
 
-
-  </div><!-- /new grid -->
+</div><!-- /page-body -->
 
 </body>
 </html>
